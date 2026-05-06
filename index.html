@@ -69,8 +69,11 @@
   <!-- 实线段2: 标签右(1042)→面板左(1072), 箭头尖端在面板侧 -->
   <line x1="1043" y1="415" x2="1072" y2="415" stroke="#cbd5e1" stroke-width="2"/>
   <polygon points="1072,411 1072,419 1080,415" fill="#94a3b8"/>
-  <!-- 虚线: 1080→1000→921, 箭头尖端在节点侧(左) -->
-  <line x1="1080" y1="432" x2="929" y2="432" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="5,3"/>
+  <!-- 虚线: 1080→标签右(1044)，标签(958~1043)，标签左(957)→921 -->
+  <line x1="1080" y1="432" x2="1045" y2="432" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="5,3"/>
+  <rect x="958" y="420" width="84" height="18" rx="4" fill="#f0fdf4" stroke="#86efac" stroke-width="1.5"/>
+  <text x="1000" y="433" text-anchor="middle" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="10" font-weight="600" fill="#166534">返回 SQL</text>
+  <line x1="957" y1="432" x2="929" y2="432" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="5,3"/>
   <polygon points="929,428 929,436 921,432" fill="#94a3b8"/>
 
   <!--

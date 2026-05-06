@@ -54,18 +54,26 @@
   <line x1="700" y1="460" x2="700" y2="517" stroke="#cbd5e1" stroke-width="3" marker-end="url(#arr)"/>
   <line x1="700" y1="610" x2="700" y2="667" stroke="#cbd5e1" stroke-width="3" marker-end="url(#arr)"/>
 
-  <!-- 右侧连线: 节点right=920 → 面板left=1080, y=415, 中间放标签 -->
-  <!-- 线段1: 920→940（标签前） -->
-  <line x1="920" y1="415" x2="938" y2="415" stroke="#cbd5e1" stroke-width="2"/>
+  <!--
+    记忆系统连线设计：
+    实线：记忆面板(1080) → [调用记忆系统] → 节点(920)
+      箭头指向节点（左），表示记忆系统返回SQL给节点
+    虚线：节点(920) - - → 记忆面板(1080)
+      箭头指向右(记忆面板)，表示节点发起调用
+  -->
+  <!-- 实线段1: 记忆面板左边(1080)→标签右边(1019) -->
+  <line x1="1080" y1="415" x2="1020" y2="415" stroke="#cbd5e1" stroke-width="2"/>
   <!-- 标签 -->
   <rect x="938" y="403" width="80" height="20" rx="4" fill="#f1f5f9" stroke="#e2e8f0" stroke-width="1.5"/>
   <text x="978" y="417" text-anchor="middle" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="10" font-weight="600" fill="#64748b">调用记忆系统</text>
-  <!-- 线段2: 1018→1078（带箭头） -->
-  <line x1="1018" y1="415" x2="1072" y2="415" stroke="#cbd5e1" stroke-width="2"/>
-  <polygon points="1072,411 1072,419 1080,415" fill="#94a3b8"/>
-  <!-- 返回虚线 y=432，手画箭头指向左（节点方向） -->
-  <line x1="1080" y1="432" x2="922" y2="432" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="5,3"/>
-  <polygon points="920,428 920,436 912,432" fill="#94a3b8"/>
+  <!-- 实线段2: 标签左边(938)→节点右边(929), 箭头←指向节点 -->
+  <line x1="937" y1="415" x2="929" y2="415" stroke="#cbd5e1" stroke-width="2"/>
+  <!-- 左向箭头：尖端在x=921，开口在x=929 -->
+  <polygon points="929,411 929,419 921,415" fill="#94a3b8"/>
+  <!-- 虚线: 节点右边(920) - - → 记忆面板左边(1080)，箭头→指向记忆面板 -->
+  <line x1="920" y1="432" x2="1073" y2="432" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="5,3"/>
+  <!-- 右向箭头：尖端在x=1081，开口在x=1073 -->
+  <polygon points="1073,428 1073,436 1081,432" fill="#94a3b8"/>
 
   <!--
     DB连线设计：

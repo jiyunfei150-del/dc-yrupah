@@ -6,7 +6,7 @@
 </head>
 <body style="margin:0;padding:40px;background:#fff;display:flex;justify-content:center;">
 
-<svg width="1400" height="900" viewBox="0 0 1400 900" xmlns="http://www.w3.org/2000/svg">
+<svg width="1600" height="900" viewBox="0 0 1600 900" xmlns="http://www.w3.org/2000/svg">
   <defs>
     <marker id="arr" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto">
       <polygon points="0,0 0,10 10,5" fill="#94a3b8"/>
@@ -30,121 +30,120 @@
       <stop offset="0%" stop-color="#f97316"/><stop offset="100%" stop-color="#dc2626"/>
     </linearGradient>
     <filter id="sh">
-      <feDropShadow dx="0" dy="4" stdDeviation="8" flood-color="rgba(0,0,0,0.13)"/>
+      <feDropShadow dx="0" dy="4" stdDeviation="8" flood-color="rgba(0,0,0,0.12)"/>
     </filter>
   </defs>
 
   <!--
-    布局（画布 1400×900）：
-    主干节点：x=480, w=440, h=90  → cx=700
-    节点间 gap=60（箭头区）
+    画布 1600×900，主干居中 cx=800
 
-    Node1: y=70,   cy=115
-    Node2: y=220,  cy=265
-    Node3: y=370,  cy=415  ← 记忆面板连线
-    Node4: y=520,  cy=565  ← DB面板连线
-    Node5: y=670,  cy=715
+    主干节点: x=580, w=440, h=90
+    节点右边: 1020  → 记忆面板 left=1100 (间距80), w=460
+    节点左边: 580   → DB面板 right=500 (间距80), left=60, w=430
 
-    节点右边: 480+440=920  →  记忆面板 left=1000（间距80）
-    节点左边: 480           →  DB面板 right=400（间距80），left=60, w=330
+    Y坐标 (gap=60):
+      Node1: y=70,  cy=115
+      Node2: y=220, cy=265
+      Node3: y=370, cy=415  ← 记忆面板连线
+      Node4: y=520, cy=565  ← DB面板连线
+      Node5: y=670, cy=715
 
-    记忆面板: x=1000, w=370, h≈240 → top=415-120=295
-    DB面板:   x=60, w=330, h≈150  → top=565-75=490
+    记忆面板: h≈240, top=415-120=295
+    DB面板:   h≈150, top=565-75=490
   -->
 
-  <!-- ══ Header ══ -->
-  <text x="700" y="36" text-anchor="middle" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="24" font-weight="800" fill="#0f172a">智能问数平台 · 主流程</text>
-  <text x="700" y="58" text-anchor="middle" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="13" fill="#94a3b8">用户自然语言提问 → 记忆系统生成 SQL → 连库执行 → 返回结果</text>
+  <!-- Header -->
+  <text x="800" y="36" text-anchor="middle" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="24" font-weight="800" fill="#0f172a">智能问数平台 · 主流程</text>
+  <text x="800" y="58" text-anchor="middle" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="13" fill="#94a3b8">用户自然语言提问 → 记忆系统生成 SQL → 连库执行 → 返回结果</text>
 
-  <!-- ══ 主干竖向箭头 ══ -->
-  <line x1="700" y1="160" x2="700" y2="217" stroke="#cbd5e1" stroke-width="3" marker-end="url(#arr)"/>
-  <line x1="700" y1="310" x2="700" y2="367" stroke="#cbd5e1" stroke-width="3" marker-end="url(#arr)"/>
-  <line x1="700" y1="460" x2="700" y2="517" stroke="#cbd5e1" stroke-width="3" marker-end="url(#arr)"/>
-  <line x1="700" y1="610" x2="700" y2="667" stroke="#cbd5e1" stroke-width="3" marker-end="url(#arr)"/>
+  <!-- 主干竖向箭头 cx=800 -->
+  <line x1="800" y1="160" x2="800" y2="217" stroke="#cbd5e1" stroke-width="3" marker-end="url(#arr)"/>
+  <line x1="800" y1="310" x2="800" y2="367" stroke="#cbd5e1" stroke-width="3" marker-end="url(#arr)"/>
+  <line x1="800" y1="460" x2="800" y2="517" stroke="#cbd5e1" stroke-width="3" marker-end="url(#arr)"/>
+  <line x1="800" y1="610" x2="800" y2="667" stroke="#cbd5e1" stroke-width="3" marker-end="url(#arr)"/>
 
-  <!-- ══ 分支连线 ══ -->
-  <!-- Node3右→记忆面板 y=415: 920→998 -->
-  <line x1="920" y1="415" x2="997" y2="415" stroke="#cbd5e1" stroke-width="2" marker-end="url(#arr)"/>
+  <!-- Node3右→记忆面板 y=415: 1020→1098 -->
+  <line x1="1020" y1="415" x2="1097" y2="415" stroke="#cbd5e1" stroke-width="2" marker-end="url(#arr)"/>
   <!-- 返回虚线 y=435 -->
-  <line x1="1000" y1="435" x2="922" y2="435" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#arr-l)"/>
+  <line x1="1100" y1="435" x2="1022" y2="435" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#arr-l)"/>
 
-  <!-- Node4左→DB面板 y=565: 480→402 -->
-  <line x1="480" y1="565" x2="403" y2="565" stroke="#cbd5e1" stroke-width="2" marker-end="url(#arr-l)"/>
+  <!-- Node4左→DB面板 y=565: 580→502 -->
+  <line x1="580" y1="565" x2="503" y2="565" stroke="#cbd5e1" stroke-width="2" marker-end="url(#arr-l)"/>
   <!-- 返回虚线 y=585 -->
-  <line x1="400" y1="585" x2="478" y2="585" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#arr)"/>
+  <line x1="500" y1="585" x2="578" y2="585" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#arr)"/>
 
-  <!-- ══ NODE 1 ══ -->
-  <rect x="480" y="70" width="440" height="90" rx="16" fill="url(#g-user)" filter="url(#sh)"/>
-  <text x="700" y="112" text-anchor="middle" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="20" font-weight="700" fill="white">👤 用户提问</text>
-  <text x="700" y="138" text-anchor="middle" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="13" fill="rgba(255,255,255,0.88)">自然语言，如：本周 DAU 多少？</text>
+  <!-- NODE 1 -->
+  <rect x="580" y="70" width="440" height="90" rx="16" fill="url(#g-user)" filter="url(#sh)"/>
+  <text x="800" y="112" text-anchor="middle" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="20" font-weight="700" fill="white">👤 用户提问</text>
+  <text x="800" y="138" text-anchor="middle" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="13" fill="rgba(255,255,255,0.88)">自然语言，如：本周 DAU 多少？</text>
 
-  <!-- ══ NODE 2 ══ -->
-  <rect x="480" y="220" width="440" height="90" rx="16" fill="url(#g-recv)" filter="url(#sh)"/>
-  <text x="700" y="262" text-anchor="middle" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="20" font-weight="700" fill="white">🖥️ 智能问数平台</text>
-  <text x="700" y="288" text-anchor="middle" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="13" fill="rgba(255,255,255,0.88)">接收消息，附带 user_id / project</text>
+  <!-- NODE 2 -->
+  <rect x="580" y="220" width="440" height="90" rx="16" fill="url(#g-recv)" filter="url(#sh)"/>
+  <text x="800" y="262" text-anchor="middle" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="20" font-weight="700" fill="white">🖥️ 智能问数平台</text>
+  <text x="800" y="288" text-anchor="middle" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="13" fill="rgba(255,255,255,0.88)">接收消息，附带 user_id / project</text>
 
-  <!-- ══ NODE 3 ══ -->
-  <rect x="480" y="370" width="440" height="90" rx="16" fill="url(#g-mem)" filter="url(#sh)"/>
-  <text x="700" y="412" text-anchor="middle" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="20" font-weight="700" fill="white">🧠 检索记忆系统</text>
-  <text x="700" y="438" text-anchor="middle" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="13" fill="rgba(255,255,255,0.88)">获取 SQL</text>
+  <!-- NODE 3 -->
+  <rect x="580" y="370" width="440" height="90" rx="16" fill="url(#g-mem)" filter="url(#sh)"/>
+  <text x="800" y="412" text-anchor="middle" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="20" font-weight="700" fill="white">🧠 检索记忆系统</text>
+  <text x="800" y="438" text-anchor="middle" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="13" fill="rgba(255,255,255,0.88)">获取 SQL</text>
 
-  <!-- ══ NODE 4 ══ -->
-  <rect x="480" y="520" width="440" height="90" rx="16" fill="url(#g-exec)" filter="url(#sh)"/>
-  <text x="700" y="562" text-anchor="middle" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="20" font-weight="700" fill="white">⚙️ 智能问数平台</text>
-  <text x="700" y="588" text-anchor="middle" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="13" fill="rgba(255,255,255,0.88)">连库分析，执行 SQL</text>
+  <!-- NODE 4 -->
+  <rect x="580" y="520" width="440" height="90" rx="16" fill="url(#g-exec)" filter="url(#sh)"/>
+  <text x="800" y="562" text-anchor="middle" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="20" font-weight="700" fill="white">⚙️ 智能问数平台</text>
+  <text x="800" y="588" text-anchor="middle" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="13" fill="rgba(255,255,255,0.88)">连库分析，执行 SQL</text>
 
-  <!-- ══ NODE 5 ══ -->
-  <rect x="480" y="670" width="440" height="90" rx="16" fill="url(#g-result)" filter="url(#sh)"/>
-  <text x="700" y="712" text-anchor="middle" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="20" font-weight="700" fill="white">📊 用户收到结果</text>
-  <text x="700" y="738" text-anchor="middle" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="13" fill="rgba(255,255,255,0.88)">数据表格 / 图表展示</text>
+  <!-- NODE 5 -->
+  <rect x="580" y="670" width="440" height="90" rx="16" fill="url(#g-result)" filter="url(#sh)"/>
+  <text x="800" y="712" text-anchor="middle" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="20" font-weight="700" fill="white">📊 用户收到结果</text>
+  <text x="800" y="738" text-anchor="middle" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="13" fill="rgba(255,255,255,0.88)">数据表格 / 图表展示</text>
 
-  <!-- ══ 连线标签 ══ -->
-  <rect x="924" y="398" width="72" height="20" rx="4" fill="#f1f5f9" stroke="#e2e8f0" stroke-width="1.5"/>
-  <text x="960" y="412" text-anchor="middle" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="10" font-weight="600" fill="#64748b">调用记忆系统</text>
-  <rect x="406" y="548" width="52" height="20" rx="4" fill="#f1f5f9" stroke="#e2e8f0" stroke-width="1.5"/>
-  <text x="432" y="562" text-anchor="middle" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="10" font-weight="600" fill="#64748b">执行 SQL</text>
+  <!-- 连线标签 -->
+  <rect x="1024" y="398" width="72" height="20" rx="4" fill="#f1f5f9" stroke="#e2e8f0" stroke-width="1.5"/>
+  <text x="1060" y="412" text-anchor="middle" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="10" font-weight="600" fill="#64748b">调用记忆系统</text>
+  <rect x="506" y="548" width="52" height="20" rx="4" fill="#f1f5f9" stroke="#e2e8f0" stroke-width="1.5"/>
+  <text x="532" y="562" text-anchor="middle" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="10" font-weight="600" fill="#64748b">执行 SQL</text>
 
-  <!-- ══ 记忆面板（右侧）x=1000, y=295, w=370, h=250 ══ -->
-  <rect x="1000" y="295" width="370" height="250" rx="14" fill="#f8fafc" stroke="#e2e8f0" stroke-width="1.5" filter="url(#sh)"/>
-  <text x="1020" y="320" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="10" font-weight="700" fill="#94a3b8" letter-spacing="1">记忆系统 · 子流程</text>
-  <line x1="1000" y1="330" x2="1370" y2="330" stroke="#e2e8f0" stroke-width="1"/>
+  <!-- 记忆面板: x=1100, y=295, w=460, h=250 -->
+  <rect x="1100" y="295" width="460" height="250" rx="14" fill="#f8fafc" stroke="#e2e8f0" stroke-width="1.5" filter="url(#sh)"/>
+  <text x="1122" y="320" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="10" font-weight="700" fill="#94a3b8" letter-spacing="1">记忆系统 · 子流程</text>
+  <line x1="1100" y1="330" x2="1560" y2="330" stroke="#e2e8f0" stroke-width="1"/>
 
-  <circle cx="1028" cy="353" r="14" fill="#8b5cf6"/>
-  <text x="1028" y="358" text-anchor="middle" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="12" font-weight="700" fill="white">1</text>
-  <text x="1052" y="349" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="13" font-weight="600" fill="#1e293b">意图识别</text>
-  <text x="1052" y="366" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="11" fill="#94a3b8">LLM 解析指标 / 时间 / 维度</text>
-  <line x1="1000" y1="382" x2="1370" y2="382" stroke="#f1f5f9" stroke-width="1"/>
+  <circle cx="1130" cy="353" r="13" fill="#8b5cf6"/>
+  <text x="1130" y="358" text-anchor="middle" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="12" font-weight="700" fill="white">1</text>
+  <text x="1154" y="349" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="13" font-weight="600" fill="#1e293b">意图识别</text>
+  <text x="1154" y="365" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="11" fill="#94a3b8">LLM 解析指标 / 时间 / 维度</text>
+  <line x1="1100" y1="380" x2="1560" y2="380" stroke="#f1f5f9" stroke-width="1"/>
 
-  <circle cx="1028" cy="403" r="14" fill="#3b82f6"/>
-  <text x="1028" y="408" text-anchor="middle" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="12" font-weight="700" fill="white">2</text>
-  <text x="1052" y="399" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="13" font-weight="600" fill="#1e293b">向量检索</text>
-  <text x="1052" y="416" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="11" fill="#94a3b8">Weaviate 语义召回相关指标</text>
-  <line x1="1000" y1="432" x2="1370" y2="432" stroke="#f1f5f9" stroke-width="1"/>
+  <circle cx="1130" cy="400" r="13" fill="#3b82f6"/>
+  <text x="1130" y="405" text-anchor="middle" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="12" font-weight="700" fill="white">2</text>
+  <text x="1154" y="396" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="13" font-weight="600" fill="#1e293b">向量检索</text>
+  <text x="1154" y="412" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="11" fill="#94a3b8">Weaviate 语义召回相关指标</text>
+  <line x1="1100" y1="427" x2="1560" y2="427" stroke="#f1f5f9" stroke-width="1"/>
 
-  <circle cx="1028" cy="453" r="14" fill="#10b981"/>
-  <text x="1028" y="458" text-anchor="middle" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="12" font-weight="700" fill="white">3</text>
-  <text x="1052" y="449" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="13" font-weight="600" fill="#1e293b">血缘查询</text>
-  <text x="1052" y="466" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="11" fill="#94a3b8">Neo4j 图谱追踪字段来源</text>
-  <line x1="1000" y1="482" x2="1370" y2="482" stroke="#f1f5f9" stroke-width="1"/>
+  <circle cx="1130" cy="447" r="13" fill="#10b981"/>
+  <text x="1130" y="452" text-anchor="middle" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="12" font-weight="700" fill="white">3</text>
+  <text x="1154" y="443" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="13" font-weight="600" fill="#1e293b">血缘查询</text>
+  <text x="1154" y="459" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="11" fill="#94a3b8">Neo4j 图谱追踪字段来源</text>
+  <line x1="1100" y1="474" x2="1560" y2="474" stroke="#f1f5f9" stroke-width="1"/>
 
-  <circle cx="1028" cy="503" r="14" fill="#f59e0b"/>
-  <text x="1028" y="508" text-anchor="middle" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="12" font-weight="700" fill="white">4</text>
-  <text x="1052" y="499" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="13" font-weight="600" fill="#1e293b">SQL 组装</text>
-  <text x="1052" y="516" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="11" fill="#94a3b8">LLM 生成 SQL，填充日期 / 条件</text>
+  <circle cx="1130" cy="494" r="13" fill="#f59e0b"/>
+  <text x="1130" y="499" text-anchor="middle" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="12" font-weight="700" fill="white">4</text>
+  <text x="1154" y="490" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="13" font-weight="600" fill="#1e293b">SQL 组装</text>
+  <text x="1154" y="506" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="11" fill="#94a3b8">LLM 生成 SQL，填充日期 / 条件</text>
 
-  <rect x="1010" y="528" width="350" height="28" rx="8" fill="#f0fdf4" stroke="#86efac" stroke-width="1.5"/>
-  <text x="1185" y="546" text-anchor="middle" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="12" font-weight="600" fill="#166534">↩ 返回 SQL 至智能问数平台</text>
+  <rect x="1112" y="520" width="436" height="26" rx="8" fill="#f0fdf4" stroke="#86efac" stroke-width="1.5"/>
+  <text x="1330" y="537" text-anchor="middle" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="12" font-weight="600" fill="#166534">↩ 返回 SQL 至智能问数平台</text>
 
-  <!-- ══ DB面板（左侧）x=60, y=490, w=330, h=155 ══ -->
-  <rect x="60" y="490" width="330" height="155" rx="14" fill="#fff7ed" stroke="#fed7aa" stroke-width="1.5" filter="url(#sh)"/>
-  <text x="225" y="528" text-anchor="middle" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="30">🗄️</text>
-  <text x="225" y="556" text-anchor="middle" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="17" font-weight="700" fill="#9a3412">ADB / SR / CK</text>
-  <text x="225" y="576" text-anchor="middle" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="12" fill="#c2410c">业务数仓 · 仅智能问数平台可连接</text>
-  <rect x="76" y="590" width="298" height="28" rx="8" fill="#fef9c3" stroke="#fde047" stroke-width="1.5"/>
-  <text x="225" y="608" text-anchor="middle" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="12" font-weight="600" fill="#78350f">↩ 返回查询数据</text>
+  <!-- DB面板: x=60, y=490, w=430, h=155 -->
+  <rect x="60" y="490" width="430" height="155" rx="14" fill="#fff7ed" stroke="#fed7aa" stroke-width="1.5" filter="url(#sh)"/>
+  <text x="275" y="530" text-anchor="middle" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="30">🗄️</text>
+  <text x="275" y="558" text-anchor="middle" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="17" font-weight="700" fill="#9a3412">ADB / SR / CK</text>
+  <text x="275" y="578" text-anchor="middle" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="12" fill="#c2410c">业务数仓 · 仅智能问数平台可连接</text>
+  <rect x="78" y="592" width="394" height="26" rx="8" fill="#fef9c3" stroke="#fde047" stroke-width="1.5"/>
+  <text x="275" y="609" text-anchor="middle" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="12" font-weight="600" fill="#78350f">↩ 返回查询数据</text>
 
-  <!-- ══ Footer ══ -->
-  <text x="700" y="888" text-anchor="middle" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="11" fill="#cbd5e1">Generated by 小D · DataClaw</text>
+  <!-- Footer -->
+  <text x="800" y="888" text-anchor="middle" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="11" fill="#cbd5e1">Generated by 小D · DataClaw</text>
 </svg>
 
 </body>

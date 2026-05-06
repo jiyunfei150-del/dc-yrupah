@@ -4,212 +4,191 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>智能问数平台 · 主流程</title>
-<style>
-  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  body {
-    font-family: 'Inter', 'PingFang SC', sans-serif;
-    background: #fff;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 48px 24px 80px;
-  }
-  .header { text-align: center; margin-bottom: 44px; }
-  .header h1 { font-size: 24px; font-weight: 800; color: #0f172a; margin-bottom: 8px; }
-  .header p  { font-size: 14px; color: #94a3b8; }
-
-  /*
-    坐标系（canvas 1160×700）：
-    主干节点：宽300，高80，left=430（中心 x=580）
-
-    Y坐标（节点高80，箭头高44）：
-      Node1: top=0,   bottom=80,  center=40
-      arr:   80→124
-      Node2: top=124, bottom=204, center=164
-      arr:   204→248
-      Node3: top=248, bottom=328, center=288  ← 记忆面板对齐
-      arr:   328→372
-      Node4: top=372, bottom=452, center=412  ← DB面板对齐
-      arr:   452→496
-      Node5: top=496, bottom=576, center=536
-
-    节点右边: 430+300=730
-    记忆面板: left=790 (730+60)
-
-    节点左边: 430
-    DB面板:   right≤370 (430-60=370), left=50, width=310
-
-    记忆面板: top=288-面板半高 → 面板≈230px高，top=288-115=173
-    DB面板:   top=412-面板半高 → 面板≈140px高，top=412-70=342
-  -->
-
-  .canvas {
-    position: relative;
-    width: 1160px;
-    height: 720px;
-  }
-
-  .node {
-    position: absolute;
-    left: 430px;
-    width: 300px;
-    height: 80px;
-    border-radius: 16px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    color: #fff;
-    cursor: default;
-    transition: transform .15s;
-    z-index: 2;
-  }
-  .node:hover { transform: translateY(-2px); }
-  .node-title { font-size: 17px; font-weight: 700; line-height: 1.3; }
-  .node-sub   { font-size: 12px; font-weight: 400; opacity: .88; margin-top: 4px; }
-
-  .n-user   { background: linear-gradient(135deg,#6366f1,#8b5cf6); box-shadow:0 6px 20px rgba(99,102,241,.35); }
-  .n-recv   { background: linear-gradient(135deg,#3b82f6,#1d4ed8); box-shadow:0 6px 20px rgba(59,130,246,.35); }
-  .n-mem    { background: linear-gradient(135deg,#7c3aed,#5b21b6); box-shadow:0 6px 20px rgba(124,58,237,.35); }
-  .n-exec   { background: linear-gradient(135deg,#0891b2,#0369a1); box-shadow:0 6px 20px rgba(8,145,178,.35); }
-  .n-result { background: linear-gradient(135deg,#f97316,#dc2626); box-shadow:0 6px 20px rgba(249,115,22,.35); }
-
-  .panel {
-    position: absolute;
-    border-radius: 16px;
-    padding: 18px 20px;
-    box-shadow: 0 4px 20px rgba(0,0,0,.09);
-    z-index: 1;
-  }
-  .panel-mem { background:#f8fafc; border:1.5px solid #e2e8f0; left:790px; width:350px; }
-  .panel-db  { background:#fff7ed; border:1.5px solid #fed7aa; left:50px;  width:310px; text-align:center; }
-
-  .sp-title { font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:1px; color:#94a3b8; margin-bottom:12px; }
-  .step-row { display:flex; align-items:flex-start; gap:10px; padding:7px 0; border-top:1px solid #f1f5f9; }
-  .step-row:first-of-type { border-top:none; padding-top:0; }
-  .dot { width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:#fff;flex-shrink:0; }
-  .d1{background:#8b5cf6}.d2{background:#3b82f6}.d3{background:#10b981}.d4{background:#f59e0b}
-  .st { font-size:13px; font-weight:600; color:#1e293b; }
-  .sd { font-size:11px; color:#94a3b8; margin-top:1px; }
-  .ret { margin-top:12px;font-size:12px;font-weight:600;padding:6px 12px;border-radius:8px;text-align:center; }
-  .ret-mem { background:#f0fdf4;border:1.5px solid #86efac;color:#166534; }
-  .ret-db  { background:#fef9c3;border:1.5px solid #fde047;color:#78350f; }
-  .db-icon  { font-size:28px;margin-bottom:8px; }
-  .db-title { font-size:16px;font-weight:700;color:#9a3412;margin-bottom:4px; }
-  .db-sub   { font-size:12px;color:#c2410c;line-height:1.6; }
-
-  .lbl {
-    position:absolute;
-    font-size:11px;font-weight:600;color:#64748b;
-    background:#f1f5f9;border:1.5px solid #e2e8f0;
-    border-radius:4px;padding:2px 7px;white-space:nowrap;
-    z-index:3;
-  }
-
-  .footer { margin-top:36px;font-size:11px;color:#cbd5e1;letter-spacing:.5px; }
-</style>
 </head>
-<body>
+<body style="margin:0;padding:48px 0 80px;background:#fff;display:flex;flex-direction:column;align-items:center;font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif;">
 
-<div class="header">
-  <h1>智能问数平台 · 主流程</h1>
-  <p>用户自然语言提问 → 记忆系统生成 SQL → 连库执行 → 返回结果</p>
+<!-- Header -->
+<div style="text-align:center;margin-bottom:44px;">
+  <div style="font-size:24px;font-weight:800;color:#0f172a;margin-bottom:8px;">智能问数平台 · 主流程</div>
+  <div style="font-size:13px;color:#94a3b8;">用户自然语言提问 → 记忆系统生成 SQL → 连库执行 → 返回结果</div>
 </div>
 
-<div class="canvas">
+<!--
+  精确坐标（所有 top/left 都是绝对值，canvas 1160×720）
+  节点：left=430, width=300, height=80
+  主干中心 cx = 430 + 300/2 = 580
 
-  <svg style="position:absolute;top:0;left:0;width:1160px;height:720px;" viewBox="0 0 1160 720">
+  Node1: top=0,   center_y=40
+  arr1:  y1=80 → y2=124
+  Node2: top=124, center_y=164
+  arr2:  y1=204 → y2=248
+  Node3: top=248, center_y=288  → 记忆面板连线 y=288
+  arr3:  y1=328 → y2=372
+  Node4: top=372, center_y=412  → DB面板连线 y=412
+  arr4:  y1=452 → y2=496
+  Node5: top=496
+
+  节点右边 x=730  → 记忆面板 left=790
+  节点左边 x=430  → DB面板 right=360, left=50, width=300
+
+  记忆面板高≈230 → top=288-115=173
+  DB面板高≈140   → top=412-70=342
+-->
+
+<div style="position:relative;width:1160px;height:720px;">
+
+  <!-- ══ SVG 线条层 ══ -->
+  <svg style="position:absolute;top:0;left:0;" width="1160" height="720" viewBox="0 0 1160 720">
     <defs>
-      <marker id="a" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto">
-        <path d="M0,0 L0,8 L8,4 z" fill="#94a3b8"/>
+      <marker id="arr-d" markerWidth="10" markerHeight="10" refX="7" refY="5" orient="auto">
+        <polygon points="0,0 0,10 10,5" fill="#94a3b8"/>
       </marker>
-      <marker id="al" markerWidth="8" markerHeight="8" refX="2" refY="4" orient="auto-start-reverse">
-        <path d="M8,0 L8,8 L0,4 z" fill="#94a3b8"/>
+      <marker id="arr-l" markerWidth="10" markerHeight="10" refX="3" refY="5" orient="auto-start-reverse">
+        <polygon points="10,0 10,10 0,5" fill="#94a3b8"/>
       </marker>
     </defs>
 
-    <!-- Vertical arrows (trunk cx=580) -->
-    <!-- Node1 bottom=80 → Node2 top=124 -->
-    <line x1="580" y1="80"  x2="580" y2="122" stroke="#cbd5e1" stroke-width="2.5" marker-end="url(#a)"/>
-    <!-- Node2 bottom=204 → Node3 top=248 -->
-    <line x1="580" y1="204" x2="580" y2="246" stroke="#cbd5e1" stroke-width="2.5" marker-end="url(#a)"/>
-    <!-- Node3 bottom=328 → Node4 top=372 -->
-    <line x1="580" y1="328" x2="580" y2="370" stroke="#cbd5e1" stroke-width="2.5" marker-end="url(#a)"/>
-    <!-- Node4 bottom=452 → Node5 top=496 -->
-    <line x1="580" y1="452" x2="580" y2="494" stroke="#cbd5e1" stroke-width="2.5" marker-end="url(#a)"/>
+    <!-- 主干竖向箭头 (cx=580) -->
+    <line x1="580" y1="80"  x2="580" y2="121" stroke="#cbd5e1" stroke-width="3" marker-end="url(#arr-d)"/>
+    <line x1="580" y1="204" x2="580" y2="245" stroke="#cbd5e1" stroke-width="3" marker-end="url(#arr-d)"/>
+    <line x1="580" y1="328" x2="580" y2="369" stroke="#cbd5e1" stroke-width="3" marker-end="url(#arr-d)"/>
+    <line x1="580" y1="452" x2="580" y2="493" stroke="#cbd5e1" stroke-width="3" marker-end="url(#arr-d)"/>
 
-    <!-- Node3 → Memory panel (right): node right=730, panel left=790, y=288 -->
-    <line x1="730" y1="288" x2="788" y2="288" stroke="#cbd5e1" stroke-width="2" marker-end="url(#a)"/>
-    <!-- Return dashed: y=308 -->
-    <line x1="790" y1="308" x2="732" y2="308" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#al)"/>
+    <!-- Node3 右→记忆面板 (y=288, x: 730→789) -->
+    <line x1="730" y1="288" x2="787" y2="288" stroke="#cbd5e1" stroke-width="2" marker-end="url(#arr-d)"/>
+    <!-- 返回虚线 (y=310) -->
+    <line x1="790" y1="310" x2="733" y2="310" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#arr-l)"/>
 
-    <!-- Node4 → DB panel (left): node left=430, panel right=360, y=412 -->
-    <line x1="430" y1="412" x2="362" y2="412" stroke="#cbd5e1" stroke-width="2" marker-end="url(#al)"/>
-    <!-- Return dashed: y=432 -->
-    <line x1="360" y1="432" x2="428" y2="432" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#a)"/>
+    <!-- Node4 左→DB面板 (y=412, x: 430→361) -->
+    <line x1="430" y1="412" x2="363" y2="412" stroke="#cbd5e1" stroke-width="2" marker-end="url(#arr-l)"/>
+    <!-- 返回虚线 (y=434) -->
+    <line x1="360" y1="434" x2="427" y2="434" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#arr-d)"/>
   </svg>
 
-  <!-- Nodes -->
-  <div class="node n-user"   style="top:0;">
-    <div class="node-title">👤 用户提问</div>
-    <div class="node-sub">自然语言，如：本周 DAU 多少？</div>
-  </div>
-  <div class="node n-recv"   style="top:124px;">
-    <div class="node-title">🖥️ 智能问数平台</div>
-    <div class="node-sub">接收消息，附带 user_id / project</div>
-  </div>
-  <div class="node n-mem"    style="top:248px;">
-    <div class="node-title">🧠 检索记忆系统</div>
-    <div class="node-sub">获取 SQL</div>
-  </div>
-  <div class="node n-exec"   style="top:372px;">
-    <div class="node-title">⚙️ 智能问数平台</div>
-    <div class="node-sub">连库分析，执行 SQL</div>
-  </div>
-  <div class="node n-result" style="top:496px;">
-    <div class="node-title">📊 用户收到结果</div>
-    <div class="node-sub">数据表格 / 图表展示</div>
+  <!-- ══ 主干节点 ══ -->
+
+  <!-- Node1: 用户提问 -->
+  <div style="position:absolute;left:430px;top:0;width:300px;height:80px;border-radius:16px;
+    background:linear-gradient(135deg,#6366f1,#8b5cf6);
+    box-shadow:0 6px 20px rgba(99,102,241,.35);
+    display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;color:#fff;">
+    <div style="font-size:17px;font-weight:700;">👤 用户提问</div>
+    <div style="font-size:12px;opacity:.88;margin-top:4px;">自然语言，如：本周 DAU 多少？</div>
   </div>
 
-  <!-- Labels (midpoint of connector lines) -->
-  <div class="lbl" style="left:736px; top:273px;">调用记忆系统</div>
-  <div class="lbl" style="left:370px; top:397px;">执行 SQL</div>
-
-  <!-- Memory panel (right): top = 288-115 = 173 -->
-  <div class="panel panel-mem" style="top:173px;">
-    <div class="sp-title">记忆系统 · 子流程</div>
-    <div class="step-row">
-      <div class="dot d1">1</div>
-      <div><div class="st">意图识别</div><div class="sd">LLM 解析指标 / 时间 / 维度</div></div>
-    </div>
-    <div class="step-row">
-      <div class="dot d2">2</div>
-      <div><div class="st">向量检索</div><div class="sd">Weaviate 语义召回相关指标</div></div>
-    </div>
-    <div class="step-row">
-      <div class="dot d3">3</div>
-      <div><div class="st">血缘查询</div><div class="sd">Neo4j 图谱追踪字段来源</div></div>
-    </div>
-    <div class="step-row">
-      <div class="dot d4">4</div>
-      <div><div class="st">SQL 组装</div><div class="sd">LLM 生成 SQL，填充日期 / 条件</div></div>
-    </div>
-    <div class="ret ret-mem">↩ 返回 SQL 至智能问数平台</div>
+  <!-- Node2: 智能问数平台（接收） -->
+  <div style="position:absolute;left:430px;top:124px;width:300px;height:80px;border-radius:16px;
+    background:linear-gradient(135deg,#3b82f6,#1d4ed8);
+    box-shadow:0 6px 20px rgba(59,130,246,.35);
+    display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;color:#fff;">
+    <div style="font-size:17px;font-weight:700;">🖥️ 智能问数平台</div>
+    <div style="font-size:12px;opacity:.88;margin-top:4px;">接收消息，附带 user_id / project</div>
   </div>
 
-  <!-- DB panel (left): top = 412-70 = 342 -->
-  <div class="panel panel-db" style="top:342px;">
-    <div class="db-icon">🗄️</div>
-    <div class="db-title">ADB / SR / CK</div>
-    <div class="db-sub">业务数仓<br>仅智能问数平台可连接</div>
-    <div class="ret ret-db">↩ 返回查询数据</div>
+  <!-- Node3: 检索记忆系统 -->
+  <div style="position:absolute;left:430px;top:248px;width:300px;height:80px;border-radius:16px;
+    background:linear-gradient(135deg,#7c3aed,#5b21b6);
+    box-shadow:0 6px 20px rgba(124,58,237,.35);
+    display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;color:#fff;">
+    <div style="font-size:17px;font-weight:700;">🧠 检索记忆系统</div>
+    <div style="font-size:12px;opacity:.88;margin-top:4px;">获取 SQL</div>
+  </div>
+
+  <!-- Node4: 智能问数平台（连库执行） -->
+  <div style="position:absolute;left:430px;top:372px;width:300px;height:80px;border-radius:16px;
+    background:linear-gradient(135deg,#0891b2,#0369a1);
+    box-shadow:0 6px 20px rgba(8,145,178,.35);
+    display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;color:#fff;">
+    <div style="font-size:17px;font-weight:700;">⚙️ 智能问数平台</div>
+    <div style="font-size:12px;opacity:.88;margin-top:4px;">连库分析，执行 SQL</div>
+  </div>
+
+  <!-- Node5: 用户收到结果 -->
+  <div style="position:absolute;left:430px;top:496px;width:300px;height:80px;border-radius:16px;
+    background:linear-gradient(135deg,#f97316,#dc2626);
+    box-shadow:0 6px 20px rgba(249,115,22,.35);
+    display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;color:#fff;">
+    <div style="font-size:17px;font-weight:700;">📊 用户收到结果</div>
+    <div style="font-size:12px;opacity:.88;margin-top:4px;">数据表格 / 图表展示</div>
+  </div>
+
+  <!-- ══ 连线标签 ══ -->
+  <!-- 调用记忆系统 (右侧连线上方) -->
+  <div style="position:absolute;left:736px;top:272px;font-size:11px;font-weight:600;color:#64748b;
+    background:#f1f5f9;border:1.5px solid #e2e8f0;border-radius:4px;padding:2px 7px;white-space:nowrap;">
+    调用记忆系统
+  </div>
+  <!-- 执行SQL (左侧连线上方) -->
+  <div style="position:absolute;left:370px;top:396px;font-size:11px;font-weight:600;color:#64748b;
+    background:#f1f5f9;border:1.5px solid #e2e8f0;border-radius:4px;padding:2px 7px;white-space:nowrap;">
+    执行 SQL
+  </div>
+
+  <!-- ══ 记忆面板（右侧，对齐 Node3 center y=288）══ -->
+  <!-- top = 288-115=173, left=790, width=340 -->
+  <div style="position:absolute;left:790px;top:173px;width:340px;
+    background:#f8fafc;border:1.5px solid #e2e8f0;border-radius:16px;
+    padding:18px 20px;box-shadow:0 4px 20px rgba(0,0,0,.09);">
+    <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:#94a3b8;margin-bottom:12px;">
+      记忆系统 · 子流程
+    </div>
+    <!-- Step 1 -->
+    <div style="display:flex;align-items:flex-start;gap:10px;padding:7px 0;">
+      <div style="width:28px;height:28px;border-radius:50%;background:#8b5cf6;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:#fff;flex-shrink:0;">1</div>
+      <div>
+        <div style="font-size:13px;font-weight:600;color:#1e293b;">意图识别</div>
+        <div style="font-size:11px;color:#94a3b8;margin-top:1px;">LLM 解析指标 / 时间 / 维度</div>
+      </div>
+    </div>
+    <!-- Step 2 -->
+    <div style="display:flex;align-items:flex-start;gap:10px;padding:7px 0;border-top:1px solid #f1f5f9;">
+      <div style="width:28px;height:28px;border-radius:50%;background:#3b82f6;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:#fff;flex-shrink:0;">2</div>
+      <div>
+        <div style="font-size:13px;font-weight:600;color:#1e293b;">向量检索</div>
+        <div style="font-size:11px;color:#94a3b8;margin-top:1px;">Weaviate 语义召回相关指标</div>
+      </div>
+    </div>
+    <!-- Step 3 -->
+    <div style="display:flex;align-items:flex-start;gap:10px;padding:7px 0;border-top:1px solid #f1f5f9;">
+      <div style="width:28px;height:28px;border-radius:50%;background:#10b981;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:#fff;flex-shrink:0;">3</div>
+      <div>
+        <div style="font-size:13px;font-weight:600;color:#1e293b;">血缘查询</div>
+        <div style="font-size:11px;color:#94a3b8;margin-top:1px;">Neo4j 图谱追踪字段来源</div>
+      </div>
+    </div>
+    <!-- Step 4 -->
+    <div style="display:flex;align-items:flex-start;gap:10px;padding:7px 0;border-top:1px solid #f1f5f9;">
+      <div style="width:28px;height:28px;border-radius:50%;background:#f59e0b;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:#fff;flex-shrink:0;">4</div>
+      <div>
+        <div style="font-size:13px;font-weight:600;color:#1e293b;">SQL 组装</div>
+        <div style="font-size:11px;color:#94a3b8;margin-top:1px;">LLM 生成 SQL，填充日期 / 条件</div>
+      </div>
+    </div>
+    <!-- Return -->
+    <div style="margin-top:12px;background:#f0fdf4;border:1.5px solid #86efac;color:#166534;
+      font-size:12px;font-weight:600;padding:6px 12px;border-radius:8px;text-align:center;">
+      ↩ 返回 SQL 至智能问数平台
+    </div>
+  </div>
+
+  <!-- ══ DB 面板（左侧，对齐 Node4 center y=412）══ -->
+  <!-- top = 412-70=342, left=50, width=300 -->
+  <div style="position:absolute;left:50px;top:342px;width:300px;
+    background:#fff7ed;border:1.5px solid #fed7aa;border-radius:16px;
+    padding:18px 20px;box-shadow:0 4px 20px rgba(0,0,0,.09);text-align:center;">
+    <div style="font-size:28px;margin-bottom:8px;">🗄️</div>
+    <div style="font-size:16px;font-weight:700;color:#9a3412;margin-bottom:4px;">ADB / SR / CK</div>
+    <div style="font-size:12px;color:#c2410c;line-height:1.6;">业务数仓<br>仅智能问数平台可连接</div>
+    <div style="margin-top:12px;background:#fef9c3;border:1.5px solid #fde047;color:#78350f;
+      font-size:12px;font-weight:600;padding:6px 12px;border-radius:8px;">
+      ↩ 返回查询数据
+    </div>
   </div>
 
 </div>
 
-<div class="footer">Generated by 小D · DataClaw</div>
+<!-- Footer -->
+<div style="margin-top:36px;font-size:11px;color:#cbd5e1;letter-spacing:.5px;">Generated by 小D · DataClaw</div>
 
 </body>
 </html>

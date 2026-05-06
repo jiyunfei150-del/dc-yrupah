@@ -62,19 +62,16 @@
   <text x="978" y="417" text-anchor="middle" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="10" font-weight="600" fill="#64748b">调用记忆系统</text>
   <!-- 线段2: 1018→1078（带箭头） -->
   <line x1="1018" y1="415" x2="1077" y2="415" stroke="#cbd5e1" stroke-width="2" marker-end="url(#arr)"/>
-  <!-- 返回虚线 y=435 -->
-  <line x1="1080" y1="435" x2="921" y2="435" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#arr-l)"/>
+  <!-- 返回虚线 y=432，与实线错开 -->
+  <line x1="1080" y1="432" x2="921" y2="432" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#arr-l)"/>
 
-  <!-- 左侧连线: 节点left=480 → 面板right=380, y=565 -->
-  <!-- 线段1: 480→466（标签前） -->
-  <line x1="480" y1="565" x2="467" y2="565" stroke="#cbd5e1" stroke-width="2"/>
-  <!-- 标签（中间段） -->
-  <rect x="396" y="553" width="66" height="20" rx="4" fill="#f1f5f9" stroke="#e2e8f0" stroke-width="1.5"/>
-  <text x="429" y="567" text-anchor="middle" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="10" font-weight="600" fill="#64748b">执行 SQL</text>
-  <!-- 线段2: 396→383，箭头指向左（DB面板方向） -->
-  <line x1="396" y1="565" x2="384" y2="565" stroke="#cbd5e1" stroke-width="2" marker-end="url(#arr-l)"/>
-  <!-- 返回虚线 y=585（从DB面板右边380→节点左边479） -->
-  <line x1="380" y1="585" x2="479" y2="585" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#arr)"/>
+  <!-- 左侧实线连线: 节点left=480 → DB面板right=380, y=558 -->
+  <line x1="480" y1="558" x2="467" y2="558" stroke="#cbd5e1" stroke-width="2"/>
+  <rect x="396" y="546" width="66" height="20" rx="4" fill="#f1f5f9" stroke="#e2e8f0" stroke-width="1.5"/>
+  <text x="429" y="560" text-anchor="middle" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="10" font-weight="600" fill="#64748b">执行 SQL</text>
+  <line x1="396" y1="558" x2="384" y2="558" stroke="#cbd5e1" stroke-width="2" marker-end="url(#arr-l)"/>
+  <!-- 返回虚线下移20px，y=578，与实线错开 -->
+  <line x1="380" y1="578" x2="479" y2="578" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#arr)"/>
 
   <!-- NODE 1 -->
   <rect x="480" y="70" width="440" height="90" rx="16" fill="url(#g-user)" filter="url(#sh)"/>

@@ -61,17 +61,26 @@
   <rect x="938" y="403" width="80" height="20" rx="4" fill="#f1f5f9" stroke="#e2e8f0" stroke-width="1.5"/>
   <text x="978" y="417" text-anchor="middle" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="10" font-weight="600" fill="#64748b">调用记忆系统</text>
   <!-- 线段2: 1018→1078（带箭头） -->
-  <line x1="1018" y1="415" x2="1077" y2="415" stroke="#cbd5e1" stroke-width="2" marker-end="url(#arr)"/>
-  <!-- 返回虚线 y=432，与实线错开 -->
-  <line x1="1080" y1="432" x2="921" y2="432" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#arr-l)"/>
+  <line x1="1018" y1="415" x2="1072" y2="415" stroke="#cbd5e1" stroke-width="2"/>
+  <polygon points="1072,411 1072,419 1080,415" fill="#94a3b8"/>
+  <!-- 返回虚线 y=432，手画箭头指向左（节点方向） -->
+  <line x1="1080" y1="432" x2="922" y2="432" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="5,3"/>
+  <polygon points="920,428 920,436 912,432" fill="#94a3b8"/>
 
-  <!-- 左侧实线连线: 节点left=480 → DB面板right=380, y=558 -->
+  <!-- 左侧实线: 节点(480)→标签→DB面板(380), y=558 -->
+  <!-- 节点右边到标签右边: 480→467 -->
   <line x1="480" y1="558" x2="467" y2="558" stroke="#cbd5e1" stroke-width="2"/>
+  <!-- 标签左边箭头（手画三角，尖端朝左 x=464） -->
+  <polygon points="470,554 470,562 462,558" fill="#94a3b8"/>
+  <!-- 标签 -->
   <rect x="396" y="546" width="66" height="20" rx="4" fill="#f1f5f9" stroke="#e2e8f0" stroke-width="1.5"/>
   <text x="429" y="560" text-anchor="middle" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="10" font-weight="600" fill="#64748b">执行 SQL</text>
-  <line x1="396" y1="558" x2="384" y2="558" stroke="#cbd5e1" stroke-width="2" marker-end="url(#arr-l)"/>
-  <!-- 返回虚线下移20px，y=578，与实线错开 -->
-  <line x1="380" y1="578" x2="479" y2="578" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#arr)"/>
+  <!-- 标签右边到DB面板: 462→383，箭头在终点指向右（DB方向） -->
+  <line x1="396" y1="558" x2="387" y2="558" stroke="#cbd5e1" stroke-width="2"/>
+  <polygon points="381,554 381,562 389,558" fill="#94a3b8"/>
+  <!-- 返回虚线 y=578，DB面板(380)→节点(480) -->
+  <line x1="380" y1="578" x2="479" y2="578" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="5,3"/>
+  <polygon points="480,574 480,582 488,578" fill="#94a3b8"/>
 
   <!-- NODE 1 -->
   <rect x="480" y="70" width="440" height="90" rx="16" fill="url(#g-user)" filter="url(#sh)"/>

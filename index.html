@@ -61,20 +61,18 @@
     虚线：y=432: 面板(1080) - - < 节点(920)
       箭头在节点一侧（左），表示记忆系统返回数据
   -->
-  <!-- 实线段1: 920→1000（标签前） -->
-  <line x1="920" y1="415" x2="957" y2="415" stroke="#cbd5e1" stroke-width="2"/>
-  <!-- 标签居中在x=960~1042 -->
-  <rect x="958" y="403" width="84" height="20" rx="4" fill="#f1f5f9" stroke="#cbd5e1" stroke-width="1.5"/>
-  <text x="1000" y="417" text-anchor="middle" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="10" font-weight="600" fill="#64748b">调用记忆系统</text>
-  <!-- 实线段2: 标签右(1042)→面板左(1072), 箭头尖端在面板侧 -->
-  <line x1="1043" y1="415" x2="1072" y2="415" stroke="#cbd5e1" stroke-width="2"/>
-  <polygon points="1072,411 1072,419 1080,415" fill="#94a3b8"/>
-  <!-- 虚线: 1080→标签右(1044)，标签(958~1043)，标签左(957)→921 -->
-  <line x1="1080" y1="432" x2="1045" y2="432" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="5,3"/>
-  <rect x="958" y="420" width="84" height="18" rx="4" fill="#f0fdf4" stroke="#86efac" stroke-width="1.5"/>
-  <text x="1000" y="433" text-anchor="middle" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="10" font-weight="600" fill="#166534">返回 SQL</text>
-  <line x1="957" y1="432" x2="929" y2="432" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="5,3"/>
-  <polygon points="929,428 929,436 921,432" fill="#94a3b8"/>
+  <!-- 实线 y=403: 节点(920)—[调用记忆系统]—>面板(1080) -->
+  <line x1="920" y1="403" x2="957" y2="403" stroke="#cbd5e1" stroke-width="2"/>
+  <rect x="958" y="392" width="84" height="20" rx="4" fill="#f1f5f9" stroke="#cbd5e1" stroke-width="1.5"/>
+  <text x="1000" y="406" text-anchor="middle" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="10" font-weight="600" fill="#64748b">调用记忆系统</text>
+  <line x1="1043" y1="403" x2="1072" y2="403" stroke="#cbd5e1" stroke-width="2"/>
+  <polygon points="1072,399 1072,407 1080,403" fill="#94a3b8"/>
+  <!-- 虚线 y=436: 面板(1080)<—[返回 SQL]—节点(920), 与实线间距33px -->
+  <line x1="1080" y1="436" x2="1045" y2="436" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="5,3"/>
+  <rect x="958" y="425" width="84" height="20" rx="4" fill="#f0fdf4" stroke="#86efac" stroke-width="1.5"/>
+  <text x="1000" y="439" text-anchor="middle" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="10" font-weight="600" fill="#166534">返回 SQL</text>
+  <line x1="957" y1="436" x2="929" y2="436" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="5,3"/>
+  <polygon points="929,432 929,440 921,436" fill="#94a3b8"/>
 
   <!--
     DB连线设计：

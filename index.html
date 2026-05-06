@@ -67,20 +67,27 @@
   <line x1="1080" y1="432" x2="922" y2="432" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="5,3"/>
   <polygon points="920,428 920,436 912,432" fill="#94a3b8"/>
 
-  <!-- 左侧实线: 节点(480)→标签→DB面板(380), y=558 -->
-  <!-- 节点右边到标签右边: 480→467 -->
-  <line x1="480" y1="558" x2="467" y2="558" stroke="#cbd5e1" stroke-width="2"/>
-  <!-- 标签左边箭头（手画三角，尖端朝左 x=464） -->
-  <polygon points="470,554 470,562 462,558" fill="#94a3b8"/>
+  <!--
+    DB连线设计：
+    实线：节点(480) ←[执行SQL]← DB面板(380)
+      含义：DB执行后返回数据给节点，所以实线箭头指向节点（左）
+    虚线：节点(480) - - → DB面板(380)
+      含义：节点发起调用请求
+  -->
+  <!-- 实线：从 DB 面板右边(380) → 节点左边(480), 箭头在节点一侧 -->
+  <!-- 段一：380→395 -->
+  <line x1="380" y1="558" x2="394" y2="558" stroke="#cbd5e1" stroke-width="2"/>
   <!-- 标签 -->
   <rect x="396" y="546" width="66" height="20" rx="4" fill="#f1f5f9" stroke="#e2e8f0" stroke-width="1.5"/>
   <text x="429" y="560" text-anchor="middle" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="10" font-weight="600" fill="#64748b">执行 SQL</text>
-  <!-- 标签右边到DB面板: 462→383，箭头在终点指向右（DB方向） -->
-  <line x1="396" y1="558" x2="387" y2="558" stroke="#cbd5e1" stroke-width="2"/>
-  <polygon points="381,554 381,562 389,558" fill="#94a3b8"/>
-  <!-- 返回虚线 y=578，DB面板(380)→节点(480) -->
-  <line x1="380" y1="578" x2="479" y2="578" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="5,3"/>
-  <polygon points="480,574 480,582 488,578" fill="#94a3b8"/>
+  <!-- 段二：标签右边(462)→节点左边(479), 箭头在x=479(左箭头，尖端朝左) -->
+  <line x1="463" y1="558" x2="472" y2="558" stroke="#cbd5e1" stroke-width="2"/>
+  <!-- 左向箭头：尖端在x=480，开口在x=472 -->
+  <polygon points="472,554 472,562 480,558" fill="#94a3b8"/>
+  <!-- 虚线：节点(480) - - → DB(380)，箭头向右指向DB -->
+  <line x1="480" y1="578" x2="383" y2="578" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="5,3"/>
+  <!-- 右向箭头：尖端在x=381，开口在x=389 -->
+  <polygon points="389,574 389,582 381,578" fill="#94a3b8"/>
 
   <!-- NODE 1 -->
   <rect x="480" y="70" width="440" height="90" rx="16" fill="url(#g-user)" filter="url(#sh)"/>

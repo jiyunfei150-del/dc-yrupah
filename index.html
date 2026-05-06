@@ -94,20 +94,32 @@
     实线 y=548: 节点(480) —[执行SQL]—> DB(350), 箭头左指DB
     虚线 y=576: DB(350) —[返回数据]—> 节点(480), 箭头右指节点
   -->
-  <!-- 实线 y=548 -->
-  <line x1="480" y1="548" x2="450" y2="548" stroke="#cbd5e1" stroke-width="2"/>
-  <rect x="382" y="536" width="66" height="20" rx="4" fill="#f1f5f9" stroke="#cbd5e1" stroke-width="1.5"/>
-  <text x="415" y="550" text-anchor="middle" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="10" font-weight="600" fill="#64748b">执行 SQL</text>
-  <line x1="381" y1="548" x2="368" y2="548" stroke="#cbd5e1" stroke-width="2"/>
-  <!-- 左箭头：尖端 x=358，在DB面板外侧 -->
-  <polygon points="368,544 368,552 358,548" fill="#94a3b8"/>
-  <!-- 虚线 y=576 -->
-  <line x1="358" y1="576" x2="380" y2="576" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="5,3"/>
-  <rect x="382" y="564" width="66" height="20" rx="4" fill="#f0fdf4" stroke="#86efac" stroke-width="1.5"/>
-  <text x="415" y="578" text-anchor="middle" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="10" font-weight="600" fill="#166534">返回数据</text>
-  <line x1="449" y1="576" x2="470" y2="576" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="5,3"/>
-  <!-- 右箭头：尖端 x=480，指向节点 -->
-  <polygon points="470,572 470,580 480,576" fill="#94a3b8"/>
+  <!--
+    DB左侧连线（终稿版）
+    节点左边 x=480, DB面板右边 x=380
+    标签居中于 x=415, 宽70, 左边x=380, 右边x=450
+    左箭头画在 x=390~380 之间（DB面板外侧不存在）
+    → 箭头画在节点一侧，尖端 x=480进入节点
+
+    实线 y=548：DB面板(380) ---[执行SQL]---> 节点(480)
+      箭头尖端在节点侧（右，指向节点）
+    虚线 y=576：节点(480) ---[返回数据]---> DB面板(380)
+      箭头尖端在DB侧（左，指向DB）
+  -->
+  <!-- 实线 y=548：DB(380)→标签左(380)→标签右(450)→节点箭头(480) -->
+  <line x1="380" y1="548" x2="449" y2="548" stroke="#cbd5e1" stroke-width="2"/>
+  <rect x="380" y="537" width="70" height="20" rx="4" fill="#f1f5f9" stroke="#cbd5e1" stroke-width="1.5"/>
+  <text x="415" y="551" text-anchor="middle" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="10" font-weight="600" fill="#64748b">执行 SQL</text>
+  <!-- 右箭头：尖端 x=480，开口 x=470 -->
+  <line x1="451" y1="548" x2="470" y2="548" stroke="#cbd5e1" stroke-width="2"/>
+  <polygon points="470,544 470,552 480,548" fill="#94a3b8"/>
+  <!-- 虚线 y=576：节点(480)→标签右(450)→标签左(380)→DB箭头(370) -->
+  <line x1="480" y1="576" x2="451" y2="576" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="5,3"/>
+  <rect x="380" y="565" width="70" height="20" rx="4" fill="#f0fdf4" stroke="#86efac" stroke-width="1.5"/>
+  <text x="415" y="579" text-anchor="middle" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="10" font-weight="600" fill="#166534">返回数据</text>
+  <line x1="379" y1="576" x2="392" y2="576" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="5,3"/>
+  <!-- 左箭头：尖端 x=383，开口 x=392，DB面板外侧 -->
+  <polygon points="392,572 392,580 383,576" fill="#94a3b8"/>
 
   <!-- NODE 1 -->
   <rect x="480" y="70" width="440" height="90" rx="16" fill="url(#g-user)" filter="url(#sh)"/>

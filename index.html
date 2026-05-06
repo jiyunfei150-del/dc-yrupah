@@ -2,193 +2,173 @@
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>智能问数平台 · 主流程</title>
 </head>
-<body style="margin:0;padding:48px 0 80px;background:#fff;display:flex;flex-direction:column;align-items:center;font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif;">
+<body style="margin:0;padding:40px;background:#fff;display:flex;justify-content:center;">
 
-<!-- Header -->
-<div style="text-align:center;margin-bottom:44px;">
-  <div style="font-size:24px;font-weight:800;color:#0f172a;margin-bottom:8px;">智能问数平台 · 主流程</div>
-  <div style="font-size:13px;color:#94a3b8;">用户自然语言提问 → 记忆系统生成 SQL → 连库执行 → 返回结果</div>
-</div>
+<svg width="1200" height="720" viewBox="0 0 1200 720" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <!-- 箭头 -->
+    <marker id="arr" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto">
+      <polygon points="0,0 0,10 10,5" fill="#94a3b8"/>
+    </marker>
+    <marker id="arr-l" markerWidth="10" markerHeight="10" refX="2" refY="5" orient="auto-start-reverse">
+      <polygon points="10,0 10,10 0,5" fill="#94a3b8"/>
+    </marker>
+    <!-- 渐变 -->
+    <linearGradient id="g-user" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#6366f1"/>
+      <stop offset="100%" stop-color="#8b5cf6"/>
+    </linearGradient>
+    <linearGradient id="g-recv" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#3b82f6"/>
+      <stop offset="100%" stop-color="#1d4ed8"/>
+    </linearGradient>
+    <linearGradient id="g-mem" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#7c3aed"/>
+      <stop offset="100%" stop-color="#5b21b6"/>
+    </linearGradient>
+    <linearGradient id="g-exec" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0891b2"/>
+      <stop offset="100%" stop-color="#0369a1"/>
+    </linearGradient>
+    <linearGradient id="g-result" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#f97316"/>
+      <stop offset="100%" stop-color="#dc2626"/>
+    </linearGradient>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="4" stdDeviation="6" flood-color="rgba(0,0,0,0.15)"/>
+    </filter>
+  </defs>
 
-<!--
-  精确坐标（所有 top/left 都是绝对值，canvas 1160×720）
-  节点：left=430, width=300, height=80
-  主干中心 cx = 430 + 300/2 = 580
+  <!--
+    坐标设计（宽1200）：
+    主干节点：x=440, w=320, h=80
+    主干中心 cx = 440+160 = 600
 
-  Node1: top=0,   center_y=40
-  arr1:  y1=80 → y2=124
-  Node2: top=124, center_y=164
-  arr2:  y1=204 → y2=248
-  Node3: top=248, center_y=288  → 记忆面板连线 y=288
-  arr3:  y1=328 → y2=372
-  Node4: top=372, center_y=412  → DB面板连线 y=412
-  arr4:  y1=452 → y2=496
-  Node5: top=496
+    节点间距：node_h=80, gap=50（箭头区）
+    Node1: y=60,   cy=100
+    Node2: y=190,  cy=230
+    Node3: y=320,  cy=360  ← 记忆面板中心对齐
+    Node4: y=450,  cy=490  ← DB面板中心对齐
+    Node5: y=580,  cy=620
 
-  节点右边 x=730  → 记忆面板 left=790
-  节点左边 x=430  → DB面板 right=360, left=50, width=300
+    节点右边: 440+320=760  → 记忆面板: x=840, w=320
+    节点左边: 440           → DB面板: x=40, w=320 (right edge=360)
 
-  记忆面板高≈230 → top=288-115=173
-  DB面板高≈140   → top=412-70=342
--->
+    连线:
+      右: x1=760 → x2=838, y=360
+      左: x1=440 → x2=362, y=490
 
-<div style="position:relative;width:1160px;height:720px;">
+    记忆面板: y=360-110=250, h≈220
+    DB面板:   y=490-70=420, h≈140
+  -->
 
-  <!-- ══ SVG 线条层 ══ -->
-  <svg style="position:absolute;top:0;left:0;" width="1160" height="720" viewBox="0 0 1160 720">
-    <defs>
-      <marker id="arr-d" markerWidth="10" markerHeight="10" refX="7" refY="5" orient="auto">
-        <polygon points="0,0 0,10 10,5" fill="#94a3b8"/>
-      </marker>
-      <marker id="arr-l" markerWidth="10" markerHeight="10" refX="3" refY="5" orient="auto-start-reverse">
-        <polygon points="10,0 10,10 0,5" fill="#94a3b8"/>
-      </marker>
-    </defs>
+  <!-- ═══════════════ HEADER ═══════════════ -->
+  <text x="600" y="30" text-anchor="middle" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="22" font-weight="800" fill="#0f172a">智能问数平台 · 主流程</text>
+  <text x="600" y="52" text-anchor="middle" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="13" fill="#94a3b8">用户自然语言提问 → 记忆系统生成 SQL → 连库执行 → 返回结果</text>
 
-    <!-- 主干竖向箭头 (cx=580) -->
-    <line x1="580" y1="80"  x2="580" y2="121" stroke="#cbd5e1" stroke-width="3" marker-end="url(#arr-d)"/>
-    <line x1="580" y1="204" x2="580" y2="245" stroke="#cbd5e1" stroke-width="3" marker-end="url(#arr-d)"/>
-    <line x1="580" y1="328" x2="580" y2="369" stroke="#cbd5e1" stroke-width="3" marker-end="url(#arr-d)"/>
-    <line x1="580" y1="452" x2="580" y2="493" stroke="#cbd5e1" stroke-width="3" marker-end="url(#arr-d)"/>
+  <!-- ═══════════════ VERTICAL ARROWS ═══════════════ -->
+  <line x1="600" y1="140" x2="600" y2="187" stroke="#cbd5e1" stroke-width="3" marker-end="url(#arr)"/>
+  <line x1="600" y1="270" x2="600" y2="317" stroke="#cbd5e1" stroke-width="3" marker-end="url(#arr)"/>
+  <line x1="600" y1="400" x2="600" y2="447" stroke="#cbd5e1" stroke-width="3" marker-end="url(#arr)"/>
+  <line x1="600" y1="530" x2="600" y2="577" stroke="#cbd5e1" stroke-width="3" marker-end="url(#arr)"/>
 
-    <!-- Node3 右→记忆面板 (y=288, x: 730→789) -->
-    <line x1="730" y1="288" x2="787" y2="288" stroke="#cbd5e1" stroke-width="2" marker-end="url(#arr-d)"/>
-    <!-- 返回虚线 (y=310) -->
-    <line x1="790" y1="310" x2="733" y2="310" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#arr-l)"/>
+  <!-- ═══════════════ BRANCH LINES ═══════════════ -->
+  <!-- Node3 → 记忆面板 (y=360): 760→838 -->
+  <line x1="760" y1="360" x2="836" y2="360" stroke="#cbd5e1" stroke-width="2" marker-end="url(#arr)"/>
+  <!-- 返回虚线 y=375 -->
+  <line x1="840" y1="375" x2="762" y2="375" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#arr-l)"/>
 
-    <!-- Node4 左→DB面板 (y=412, x: 430→361) -->
-    <line x1="430" y1="412" x2="363" y2="412" stroke="#cbd5e1" stroke-width="2" marker-end="url(#arr-l)"/>
-    <!-- 返回虚线 (y=434) -->
-    <line x1="360" y1="434" x2="427" y2="434" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#arr-d)"/>
-  </svg>
+  <!-- Node4 → DB面板 (y=490): 440→362 -->
+  <line x1="440" y1="490" x2="364" y2="490" stroke="#cbd5e1" stroke-width="2" marker-end="url(#arr-l)"/>
+  <!-- 返回虚线 y=505 -->
+  <line x1="360" y1="505" x2="438" y2="505" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#arr)"/>
 
-  <!-- ══ 主干节点 ══ -->
+  <!-- ═══════════════ NODE 1: 用户提问 ═══════════════ -->
+  <rect x="440" y="60" width="320" height="80" rx="14" fill="url(#g-user)" filter="url(#shadow)"/>
+  <text x="600" y="97" text-anchor="middle" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="18" font-weight="700" fill="white">👤 用户提问</text>
+  <text x="600" y="120" text-anchor="middle" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="12" fill="rgba(255,255,255,0.88)">自然语言，如：本周 DAU 多少？</text>
 
-  <!-- Node1: 用户提问 -->
-  <div style="position:absolute;left:430px;top:0;width:300px;height:80px;border-radius:16px;
-    background:linear-gradient(135deg,#6366f1,#8b5cf6);
-    box-shadow:0 6px 20px rgba(99,102,241,.35);
-    display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;color:#fff;">
-    <div style="font-size:17px;font-weight:700;">👤 用户提问</div>
-    <div style="font-size:12px;opacity:.88;margin-top:4px;">自然语言，如：本周 DAU 多少？</div>
-  </div>
+  <!-- ═══════════════ NODE 2: 智能问数平台（接收）═══════════════ -->
+  <rect x="440" y="190" width="320" height="80" rx="14" fill="url(#g-recv)" filter="url(#shadow)"/>
+  <text x="600" y="227" text-anchor="middle" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="18" font-weight="700" fill="white">🖥️ 智能问数平台</text>
+  <text x="600" y="250" text-anchor="middle" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="12" fill="rgba(255,255,255,0.88)">接收消息，附带 user_id / project</text>
 
-  <!-- Node2: 智能问数平台（接收） -->
-  <div style="position:absolute;left:430px;top:124px;width:300px;height:80px;border-radius:16px;
-    background:linear-gradient(135deg,#3b82f6,#1d4ed8);
-    box-shadow:0 6px 20px rgba(59,130,246,.35);
-    display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;color:#fff;">
-    <div style="font-size:17px;font-weight:700;">🖥️ 智能问数平台</div>
-    <div style="font-size:12px;opacity:.88;margin-top:4px;">接收消息，附带 user_id / project</div>
-  </div>
+  <!-- ═══════════════ NODE 3: 检索记忆系统 ═══════════════ -->
+  <rect x="440" y="320" width="320" height="80" rx="14" fill="url(#g-mem)" filter="url(#shadow)"/>
+  <text x="600" y="357" text-anchor="middle" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="18" font-weight="700" fill="white">🧠 检索记忆系统</text>
+  <text x="600" y="380" text-anchor="middle" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="12" fill="rgba(255,255,255,0.88)">获取 SQL</text>
 
-  <!-- Node3: 检索记忆系统 -->
-  <div style="position:absolute;left:430px;top:248px;width:300px;height:80px;border-radius:16px;
-    background:linear-gradient(135deg,#7c3aed,#5b21b6);
-    box-shadow:0 6px 20px rgba(124,58,237,.35);
-    display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;color:#fff;">
-    <div style="font-size:17px;font-weight:700;">🧠 检索记忆系统</div>
-    <div style="font-size:12px;opacity:.88;margin-top:4px;">获取 SQL</div>
-  </div>
+  <!-- ═══════════════ NODE 4: 智能问数平台（执行）═══════════════ -->
+  <rect x="440" y="450" width="320" height="80" rx="14" fill="url(#g-exec)" filter="url(#shadow)"/>
+  <text x="600" y="487" text-anchor="middle" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="18" font-weight="700" fill="white">⚙️ 智能问数平台</text>
+  <text x="600" y="510" text-anchor="middle" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="12" fill="rgba(255,255,255,0.88)">连库分析，执行 SQL</text>
 
-  <!-- Node4: 智能问数平台（连库执行） -->
-  <div style="position:absolute;left:430px;top:372px;width:300px;height:80px;border-radius:16px;
-    background:linear-gradient(135deg,#0891b2,#0369a1);
-    box-shadow:0 6px 20px rgba(8,145,178,.35);
-    display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;color:#fff;">
-    <div style="font-size:17px;font-weight:700;">⚙️ 智能问数平台</div>
-    <div style="font-size:12px;opacity:.88;margin-top:4px;">连库分析，执行 SQL</div>
-  </div>
+  <!-- ═══════════════ NODE 5: 用户收到结果 ═══════════════ -->
+  <rect x="440" y="580" width="320" height="80" rx="14" fill="url(#g-result)" filter="url(#shadow)"/>
+  <text x="600" y="617" text-anchor="middle" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="18" font-weight="700" fill="white">📊 用户收到结果</text>
+  <text x="600" y="640" text-anchor="middle" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="12" fill="rgba(255,255,255,0.88)">数据表格 / 图表展示</text>
 
-  <!-- Node5: 用户收到结果 -->
-  <div style="position:absolute;left:430px;top:496px;width:300px;height:80px;border-radius:16px;
-    background:linear-gradient(135deg,#f97316,#dc2626);
-    box-shadow:0 6px 20px rgba(249,115,22,.35);
-    display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;color:#fff;">
-    <div style="font-size:17px;font-weight:700;">📊 用户收到结果</div>
-    <div style="font-size:12px;opacity:.88;margin-top:4px;">数据表格 / 图表展示</div>
-  </div>
+  <!-- ═══════════════ BRANCH LABELS ═══════════════ -->
+  <!-- 调用记忆系统标签 -->
+  <rect x="762" y="342" width="72" height="20" rx="4" fill="#f1f5f9" stroke="#e2e8f0" stroke-width="1.5"/>
+  <text x="798" y="356" text-anchor="middle" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="10" font-weight="600" fill="#64748b">调用记忆系统</text>
+  <!-- 执行SQL标签 -->
+  <rect x="366" y="472" width="52" height="20" rx="4" fill="#f1f5f9" stroke="#e2e8f0" stroke-width="1.5"/>
+  <text x="392" y="486" text-anchor="middle" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="10" font-weight="600" fill="#64748b">执行 SQL</text>
 
-  <!-- ══ 连线标签 ══ -->
-  <!-- 调用记忆系统 (右侧连线中段) -->
-  <div style="position:absolute;left:742px;top:265px;font-size:11px;font-weight:600;color:#64748b;
-    background:#f1f5f9;border:1.5px solid #e2e8f0;border-radius:4px;padding:2px 7px;white-space:nowrap;z-index:10;">
-    调用记忆系统
-  </div>
-  <!-- 执行SQL (左侧连线中段) -->
-  <div style="position:absolute;left:362px;top:397px;font-size:11px;font-weight:600;color:#64748b;
-    background:#f1f5f9;border:1.5px solid #e2e8f0;border-radius:4px;padding:2px 7px;white-space:nowrap;z-index:10;">
-    执行 SQL
-  </div>
+  <!-- ═══════════════ 记忆面板（右侧）═══════════════ -->
+  <!-- panel: x=840, y=250, w=320, h=230 -->
+  <rect x="840" y="250" width="320" height="230" rx="14" fill="#f8fafc" stroke="#e2e8f0" stroke-width="1.5" filter="url(#shadow)"/>
+  <!-- 标题 -->
+  <text x="860" y="276" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="10" font-weight="700" fill="#94a3b8" letter-spacing="1">记忆系统 · 子流程</text>
+  <!-- 分隔线 -->
+  <line x1="840" y1="286" x2="1160" y2="286" stroke="#e2e8f0" stroke-width="1"/>
 
-  <!-- ══ 记忆面板（右侧，对齐 Node3 center y=288）══ -->
-  <!-- top = 288-115=173, left=790, width=340 -->
-  <div style="position:absolute;left:790px;top:173px;width:340px;
-    background:#f8fafc;border:1.5px solid #e2e8f0;border-radius:16px;
-    padding:18px 20px;box-shadow:0 4px 20px rgba(0,0,0,.09);">
-    <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:#94a3b8;margin-bottom:12px;">
-      记忆系统 · 子流程
-    </div>
-    <!-- Step 1 -->
-    <div style="display:flex;align-items:flex-start;gap:10px;padding:7px 0;">
-      <div style="width:28px;height:28px;border-radius:50%;background:#8b5cf6;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:#fff;flex-shrink:0;">1</div>
-      <div>
-        <div style="font-size:13px;font-weight:600;color:#1e293b;">意图识别</div>
-        <div style="font-size:11px;color:#94a3b8;margin-top:1px;">LLM 解析指标 / 时间 / 维度</div>
-      </div>
-    </div>
-    <!-- Step 2 -->
-    <div style="display:flex;align-items:flex-start;gap:10px;padding:7px 0;border-top:1px solid #f1f5f9;">
-      <div style="width:28px;height:28px;border-radius:50%;background:#3b82f6;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:#fff;flex-shrink:0;">2</div>
-      <div>
-        <div style="font-size:13px;font-weight:600;color:#1e293b;">向量检索</div>
-        <div style="font-size:11px;color:#94a3b8;margin-top:1px;">Weaviate 语义召回相关指标</div>
-      </div>
-    </div>
-    <!-- Step 3 -->
-    <div style="display:flex;align-items:flex-start;gap:10px;padding:7px 0;border-top:1px solid #f1f5f9;">
-      <div style="width:28px;height:28px;border-radius:50%;background:#10b981;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:#fff;flex-shrink:0;">3</div>
-      <div>
-        <div style="font-size:13px;font-weight:600;color:#1e293b;">血缘查询</div>
-        <div style="font-size:11px;color:#94a3b8;margin-top:1px;">Neo4j 图谱追踪字段来源</div>
-      </div>
-    </div>
-    <!-- Step 4 -->
-    <div style="display:flex;align-items:flex-start;gap:10px;padding:7px 0;border-top:1px solid #f1f5f9;">
-      <div style="width:28px;height:28px;border-radius:50%;background:#f59e0b;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:#fff;flex-shrink:0;">4</div>
-      <div>
-        <div style="font-size:13px;font-weight:600;color:#1e293b;">SQL 组装</div>
-        <div style="font-size:11px;color:#94a3b8;margin-top:1px;">LLM 生成 SQL，填充日期 / 条件</div>
-      </div>
-    </div>
-    <!-- Return -->
-    <div style="margin-top:12px;background:#f0fdf4;border:1.5px solid #86efac;color:#166534;
-      font-size:12px;font-weight:600;padding:6px 12px;border-radius:8px;text-align:center;">
-      ↩ 返回 SQL 至智能问数平台
-    </div>
-  </div>
+  <!-- Step 1 -->
+  <circle cx="866" cy="308" r="13" fill="#8b5cf6"/>
+  <text x="866" y="313" text-anchor="middle" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="12" font-weight="700" fill="white">1</text>
+  <text x="888" y="304" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="13" font-weight="600" fill="#1e293b">意图识别</text>
+  <text x="888" y="320" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="11" fill="#94a3b8">LLM 解析指标 / 时间 / 维度</text>
+  <line x1="840" y1="333" x2="1160" y2="333" stroke="#f1f5f9" stroke-width="1"/>
 
-  <!-- ══ DB 面板（左侧，对齐 Node4 center y=412）══ -->
-  <!-- top = 412-70=342, left=50, width=300 -->
-  <div style="position:absolute;left:50px;top:342px;width:300px;
-    background:#fff7ed;border:1.5px solid #fed7aa;border-radius:16px;
-    padding:18px 20px;box-shadow:0 4px 20px rgba(0,0,0,.09);text-align:center;">
-    <div style="font-size:28px;margin-bottom:8px;">🗄️</div>
-    <div style="font-size:16px;font-weight:700;color:#9a3412;margin-bottom:4px;">ADB / SR / CK</div>
-    <div style="font-size:12px;color:#c2410c;line-height:1.6;">业务数仓<br>仅智能问数平台可连接</div>
-    <div style="margin-top:12px;background:#fef9c3;border:1.5px solid #fde047;color:#78350f;
-      font-size:12px;font-weight:600;padding:6px 12px;border-radius:8px;">
-      ↩ 返回查询数据
-    </div>
-  </div>
+  <!-- Step 2 -->
+  <circle cx="866" cy="352" r="13" fill="#3b82f6"/>
+  <text x="866" y="357" text-anchor="middle" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="12" font-weight="700" fill="white">2</text>
+  <text x="888" y="348" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="13" font-weight="600" fill="#1e293b">向量检索</text>
+  <text x="888" y="364" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="11" fill="#94a3b8">Weaviate 语义召回相关指标</text>
+  <line x1="840" y1="377" x2="1160" y2="377" stroke="#f1f5f9" stroke-width="1"/>
 
-</div>
+  <!-- Step 3 -->
+  <circle cx="866" cy="396" r="13" fill="#10b981"/>
+  <text x="866" y="401" text-anchor="middle" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="12" font-weight="700" fill="white">3</text>
+  <text x="888" y="392" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="13" font-weight="600" fill="#1e293b">血缘查询</text>
+  <text x="888" y="408" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="11" fill="#94a3b8">Neo4j 图谱追踪字段来源</text>
+  <line x1="840" y1="421" x2="1160" y2="421" stroke="#f1f5f9" stroke-width="1"/>
 
-<!-- Footer -->
-<div style="margin-top:36px;font-size:11px;color:#cbd5e1;letter-spacing:.5px;">Generated by 小D · DataClaw</div>
+  <!-- Step 4 -->
+  <circle cx="866" cy="440" r="13" fill="#f59e0b"/>
+  <text x="866" y="445" text-anchor="middle" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="12" font-weight="700" fill="white">4</text>
+  <text x="888" y="436" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="13" font-weight="600" fill="#1e293b">SQL 组装</text>
+  <text x="888" y="452" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="11" fill="#94a3b8">LLM 生成 SQL，填充日期 / 条件</text>
+
+  <!-- Return tag -->
+  <rect x="848" y="462" width="304" height="26" rx="8" fill="#f0fdf4" stroke="#86efac" stroke-width="1.5"/>
+  <text x="1000" y="479" text-anchor="middle" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="12" font-weight="600" fill="#166534">↩ 返回 SQL 至智能问数平台</text>
+
+  <!-- ═══════════════ DB面板（左侧）═══════════════ -->
+  <!-- panel: x=40, y=420, w=320, h=140 -->
+  <rect x="40" y="420" width="320" height="140" rx="14" fill="#fff7ed" stroke="#fed7aa" stroke-width="1.5" filter="url(#shadow)"/>
+  <text x="200" y="456" text-anchor="middle" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="28">🗄️</text>
+  <text x="200" y="484" text-anchor="middle" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="16" font-weight="700" fill="#9a3412">ADB / SR / CK</text>
+  <text x="200" y="502" text-anchor="middle" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="12" fill="#c2410c">业务数仓 · 仅智能问数平台可连接</text>
+  <rect x="56" y="514" width="288" height="26" rx="8" fill="#fef9c3" stroke="#fde047" stroke-width="1.5"/>
+  <text x="200" y="531" text-anchor="middle" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="12" font-weight="600" fill="#78350f">↩ 返回查询数据</text>
+
+  <!-- ═══════════════ FOOTER ═══════════════ -->
+  <text x="600" y="710" text-anchor="middle" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="11" fill="#cbd5e1">Generated by 小D · DataClaw</text>
+</svg>
 
 </body>
 </html>
